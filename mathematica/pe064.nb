@@ -1,0 +1,3 @@
+In[1]:= f[x_]:=Length[Last[ContinuedFraction[Sqrt[x]]]]
+Length[Select[Map[f,Range[2,10000]],OddQ]]
+Out[2]= 1322

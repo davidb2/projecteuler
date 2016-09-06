@@ -30,7 +30,7 @@ let rec traverse a tr =
             |> List.min
             |> (+) e) x) (xs)
 let ans =
-    "matrix.txt"
+    "../pe081.txt"
     |> read
     |> traverse [||]
 printfn "%i" ans
