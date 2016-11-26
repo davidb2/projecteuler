@@ -7,7 +7,8 @@ Languages used:
   * [Haskell](https://www.haskell.org/)
   * [Java](https://java.com/en/about/)
   * [J (APL dialect)](http://www.jsoftware.com/)
+  * [C++](https://isocpp.org/)
 
-I have currently solved `101` out of `568` problems.
+I have currently solved `107` out of `578` problems.
 
 Some English descriptions of how I solved these problems can be found [here](https://projecteulerfun.wordpress.com/).
