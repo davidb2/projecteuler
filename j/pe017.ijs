@@ -1,0 +1,24 @@
+and =: (#'and') * ((1000 - 99) - 10)
+one =: (#'one') * ((1) + (100) + (0) + (9 * 10)) 
+two =: (#'two') * ((0) + (100) + (0) + (9 * 10))
+three =: (#'three') * ((0) + (100) + (0) + (9 * 10))
+four =: (#'four') * ((0) + (100) + (10) + (9 * 10)) 
+five =: (#'five') * ((0) + (100) + (0) + (9 * 10))
+six =: (#'six') * ((0) + (100) + (10 + (10 * 10)) + (9 * 10))
+seven =: (#'seven') * ((0) + (100) + (10 + (10 * 10)) + (9 * 10))  
+eight =: (#'eight') * ((0) + (100) + (0) + (9 * 10)) 
+nine =: (#'nine') * ((0) + (100) + (10 + (10 * 10)) + (9 * 10)) 
+ten =: (#'ten') * 10
+teen =: (#'teen') * 7 * 10
+eleven =: (#'eleven') * 10
+twelve =: (#'twelve') * 10
+thir =: (#'thir') * (10 + (10 * 10))
+fif =: (#'fif') * (10 + (10 * 10))
+eigh =: (#'eigh') * (10 + (10 * 10))
+ty =: (#'ty') * 80 * 10
+twen =: (#'twen') * 10 * 10
+for =: (#'for') * 10 * 10
+hundred =: (#'hundred') * 900
+thousand =: (#'thousand') * 1
+
+ans =: +/ and, one, two, three, four, five, six, seven, eight, nine, ten, teen, eleven, twelve, thir, fif, eigh, ty, twen, for, hundred, thousand
