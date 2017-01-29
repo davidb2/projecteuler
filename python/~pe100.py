@@ -12,8 +12,6 @@ def is_triangular_num_times_two(n):
 def nth_triangular_number(n):
     return (n * (n - 1)) // 2
 
-
-
 for a in xrange(10**12, 10**13):
     itntt, x = is_triangular_num_times_two(nth_triangular_number(a))
     if itntt and Fraction(x, a) * Fraction(x-1, (a-1)) == Fraction(1/2):
