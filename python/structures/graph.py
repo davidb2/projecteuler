@@ -70,7 +70,7 @@ class Graph(object):
         self.verticies[edge.vertex2].add(edge.vertex1)
 
     @staticmethod
-    def from_adjacency_matrix(matrix):
+    def from_adjacency_matrix(matrix, labels=None):
         if not isinstance(matrix, list):
             raise TypeError('Adjacency matrix must be a 2d list. Input was of type {}.'.format(type(matrix)))
         for row in matrix:
@@ -78,6 +78,11 @@ class Graph(object):
                 raise TypeError('Adjacency matrix elements must be a 1d list. Element was of type {}.'.format(type(row)))
             if len(row) != len(matrix):
                 raise AttributeError('Adjacency matrix must have the same number of rows and columns')
+        if labels is None:
+            labels = list(range(len(matrix)))
+        else:
+            if not isinstance(labels, list):
+                raise TypeError('Adjacency matrix labels must be a 1d list. Element was of type {}.'.format(type(labels)))
         
         graph = Graph()
         vert_id = 0
@@ -85,6 +90,6 @@ class Graph(object):
         for r, row in enumerate(matrix):
             for c, col in enumerate(matrix[r]):
                 if row[c] is not None:
-                    graph.add_edge(Edge(Vertex(vert_id), Vertex(c), row[c]))
+                    graph.add_edge(Edge(Vertex(labels[vert_id]), Vertex(c), row[c]))
             vert_id += 1
         return graph
