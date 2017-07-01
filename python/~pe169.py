@@ -20,6 +20,5 @@ def answer(n):
         ans += ways(n-pows[x], x, -2)
     return ans
 
-n = 10 ** 10
+n = 10 ** 5
 print(answer(n))
-        

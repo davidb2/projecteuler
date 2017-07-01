@@ -14,17 +14,19 @@ def ways(num_set):
             for o in OPERATORS:
                 num_set.remove(n)
                 all_lower_sets = ways(num_set)
+                print all_lower_sets
+                raw_input()
                 for e in all_lower_sets:
                     try:
                         a = o(n, e)
                         ans.add(a)
                     except Exception as e:
-                        pass # print e.message
+                        pass
                     try:
                         b = o(e, n)
                         ans.add(b)
                     except Exception as e:
-                        pass # print e.message
+                        pass
                 num_set.add(n)
         cache[xs] = ans
     return cache[xs]
@@ -53,4 +55,4 @@ for a in xrange(10):
                     ans = ''.join(map(str, [a, b, c, d]))
                 break
 print 'max run: {}\nanswer: {}'.format(max_run, ans)
-# print cache[(1, 2, 5, 6)]
+print cache[(1, 2, 5, 6)]

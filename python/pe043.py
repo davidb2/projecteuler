@@ -1,9 +1,9 @@
-# d1 - could be any digit
-# d2 - could be any digit
-# d3 + d4 + d5 must be divisible by 3
-# d4 must be 0 2 4 6 8
-# d6 must be 0 or 5
-# if d7 > d8 then d7 - d8 = d6; if d7 < d8 then d6 + d8 - d7 = 11;
+d1 - could be any digit
+d2 - could be any digit
+d3 + d4 + d5 must be divisible by 3
+d4 must be 0 2 4 6 8
+d6 must be 0 or 5
+if d7 > d8 then d7 - d8 = d6; if d7 < d8 then d6 + d8 - d7 = 11;
 
 def permute(nums):
    i = -1
@@ -37,3 +37,5 @@ while l != -1:
        ans.append(int(''.join(map(str, l))))
    l = permute(l)
 print(sum(ans))
+    
+        

@@ -73,6 +73,7 @@ let oneToOne x y =
                 |> Option.isNone
         b0 && b1
 
+/// combinations
 let rec comb n l = 
     match n, l with
     | 0, _ -> [[]]
