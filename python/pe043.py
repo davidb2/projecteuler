@@ -37,5 +37,3 @@ while l != -1:
        ans.append(int(''.join(map(str, l))))
    l = permute(l)
 print(sum(ans))
-    
-        
