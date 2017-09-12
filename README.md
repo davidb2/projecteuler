@@ -9,7 +9,7 @@ Languages used:
   * [J (APL dialect)](http://www.jsoftware.com/)
   * [C++](https://isocpp.org/)
 
-I have currently solved `113` out of `578` problems.
+I have currently solved `121` out of `609` problems.
 
 [Here](https://projecteuler.net/statistics) are some statistics of Project Euler members.
 
