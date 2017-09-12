@@ -1,5 +1,7 @@
 # Project Euler Solutions
 
+![](https://projecteuler.net/profile/ljeabmreosn.png)
+
 Languages used:
 
   * [Python](https://www.python.org/)
@@ -8,8 +10,6 @@ Languages used:
   * [Java](https://java.com/en/about/)
   * [J (APL dialect)](http://www.jsoftware.com/)
   * [C++](https://isocpp.org/)
-
-I have currently solved `121` out of `609` problems.
 
 [Here](https://projecteuler.net/statistics) are some statistics of Project Euler members.
 
