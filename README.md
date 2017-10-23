@@ -13,4 +13,4 @@ Languages used:
 
 [Here](https://projecteuler.net/statistics) are some statistics of Project Euler members.
 
-Some English descriptions of how I solved these problems can be found [here](https://projecteulerfun.wordpress.com/).
+Some English descriptions of how I solved these problems can be found [here](https://projecteulerfun.wordpress.com/)
