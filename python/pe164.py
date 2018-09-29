@@ -24,4 +24,5 @@ def ans(n):
             for d2 in range(10):
                 num += count((d1, d2, n-2))
         return num
-print(ans(20))
+for i in range(10):
+    print ans(i)
