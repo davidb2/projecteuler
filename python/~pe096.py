@@ -1,174 +1,135 @@
-def irange(start, finish):
-    return xrange(start, finish+1)
+class Tile:
+  def __init__(self, number=None, hints=None):
+    self.number = number
+    self.hints = hints or set()
 
-class SudokuSolver:
-    from itertools import chain
-    EMPTY = 0
-    def __init__(self, grid, size=3):
-        self.missing = 0
-        self.size = size
-        self.min_num = 1
-        self.max_num = size * size
-        self.solved_grid = None
-        self.grid = (
-            [list(map(int, line.strip()))
-                for line in grid.strip().split('\n')]
-        )
-        self.original_grid = [row[:] for row in self.grid]
-        for row in self.grid:
-            for e in row:
-                self.missing += int(e == SudokuSolver.EMPTY)
+class Board:
+  def __init__(self, board):
+    self.board = [[Tile() for _ in range(9)] for _ in range(9)]
+    for rowIdx, row in enumerate(board):
+      for colIdx, element in enumerate(row):
+        self.board[rowIdx][colIdx].number = element
 
-    def _is_valid_row(self, r):
-        row = self.grid[r]
-        filtered_row = filter(lambda x: x != 0, row)
-        return len(set(filtered_row)) == len(filtered_row)
+  def __getitem__(self, key):
+    return self.board[key]
 
-    def _is_valid_col(self, c):
-        col = [self.grid[r][c] for r in xrange(len(self.grid))]
-        filtered_col = filter(lambda x: x != 0, col)
-        return len(set(filtered_col)) == len(filtered_col)
+  def __iter__(self):
+    return self.board.__iter__()
 
-    def _is_valid_square(self, i, j):
-        r, c = self.size * (i // self.size), self.size * (j // self.size)
-        vals = list(SudokuSolver.chain(*[row[c:c+self.size]
-                                    for row in self.grid[r:r+self.size]]))
-        filtered_vals = filter(lambda x: x != 0, vals)
-        return len(set(filtered_vals)) == len(filtered_vals)
+  def getCode(self):
+    return int(''.join([str(tile.number) for tile in self.board[0][0:3]]))
 
-    def _is_valid_guess(self, guess, i, j):
-        saved = self.grid[i][j]
-        self.grid[i][j] = guess
-        ans = ( self._is_valid_square(i, j) and
-                self._is_valid_row(i) and
-                self._is_valid_col(j)
-        )
-        self.grid[i][j] = saved
-        return ans
+  def updateAllHints(self):
+    for rowIdx, row in enumerate(self.board):
+      for colIdx, element in enumerate(row):
+        self.board[rowIdx][colIdx].hints = self.getHints(rowIdx, colIdx)
 
-    # def _is_valid_forced_row(self, r):
-    #     pass
-    # def _is_valid_forced_col(self, c):
-    #     pass
-    # def _is_valid_forced_(self, c):
-    #     pass
+  def getHints(self, row, col):
+    '''Set possible moves for (row, col).'''
+    assert 0 <= row <= len(self.board) and 0 <= col <= len(self.board[0])
+    if self.board[row][col].number is not None:
+      return set()
+    hints = set(range(1, 10))
+    for rowIdx in range(9):
+      if rowIdx != row:
+        hints.discard(self.board[rowIdx][col].number)
+    for colIdx in range(9):
+      if colIdx != col:
+        hints.discard(self.board[row][colIdx].number)
+    blockRow, blockCol = row // 3, col // 3
+    for rowIdx in range(3 * blockRow, 3 * (blockRow + 1)):
+      for colIdx in range(3 * blockCol, 3 * (blockCol + 1)):
+        if rowIdx != row or colIdx != col:
+          hints.discard(self.board[rowIdx][colIdx].number)
+    return hints
 
+  def uniqueHints(self, row, col):
+    assert 0 <= row < len(self.board) and 0 <= col < len(self.board[0])
 
-    def _is_forced(self, i, j):
-        vals = []
-        for g in irange(self.min_num, self.max_num):
-            if self._is_valid_guess(g, i, j):
-                if vals == []:
-                    vals.append(g)
-                else:
-                    return (False, None)
-        if len(vals) == 1:
-            return (True, vals[0])
-        else:
-            return (False, None)
+    colHints = set()
+    for rowIdx in range(9):
+      if rowIdx != row:
+        colHints.update(self.board[rowIdx][col].hints)
 
-    def _is_solved(self):
-        return self.missing == 0
+    rowHints = set()
+    for colIdx in range(9):
+      if colIdx != col:
+        rowHints.update(self.board[row][colIdx].hints)
 
-    def solve(self):
-        if self._is_solved():
-            self.solved_grid = [row[:] for row in self.grid]
-            return self.solved_grid
+    blockRow, blockCol = row // 3, col // 3
+    blockHints = set()
+    for rowIdx in range(3 * blockRow, 3 * (blockRow + 1)):
+      for colIdx in range(3 * blockCol, 3 * (blockCol + 1)):
+        if rowIdx != row or colIdx != col:
+          blockHints.update(self.board[rowIdx][colIdx].hints)
 
+    myHints = self.board[row][col].hints
+    return (myHints - rowHints), (myHints - colHints), (myHints - blockHints)
 
-        # find forced answer
-        forced_nums = []
-        while True:
-            num_forced_ans = 0
-            for i in xrange(self.max_num):
-                for j in xrange(self.max_num):
-                    if self.grid[i][j] == SudokuSolver.EMPTY:
-                        is_forced, forced_num = self._is_forced(i, j)
-                        if is_forced:
-                            forced_nums.append((forced_num, i, j))
-                            self.grid[i][j] = forced_num
-                            self.missing -= 1
-                            num_forced_ans += 1
-            if num_forced_ans == 0:
-                break
+  def isSolved(self):
+    for rowIdx, row in enumerate(self.board):
+      for colIdx, element in enumerate(row):
+        if self.board[rowIdx][colIdx].number is None:
+          return False
+    return True
 
-        # print self.missing
+  def __str__(self):
+    return '\n'.join([''.join([str([tile.number, '-'][tile.number is None]) for tile in row]) for row in self.board])
 
-        # if self.grid[0][2] == 5:
-        # import numpy as np
-        # print np.matrix(self.grid)
-        # raw_input()
+def solve(board, guesses=0):
+  print('##################')
+  print(f'guesses: {guesses}')
+  print('##################')
+  print(board)
+  if board.isSolved():
+    return board.getCode()
 
-        valid_guesses = {}
-        for r in xrange(self.max_num):
-            for c in xrange(self.max_num):
-                for guess in irange(self.min_num, self.max_num):
-                    if self.grid[r][c] == SudokuSolver.EMPTY:
-                        if self._is_valid_guess(guess, r, c):
-                            if (r, c) not in valid_guesses:
-                                valid_guesses[(r, c)] = []
-                            valid_guesses[(r, c)].append(guess)
-        valid_guesses = valid_guesses.items()
-        valid_guesses.sort(key=lambda x: len(x[~0]))
-        for ((r, c), arr) in valid_guesses:
-            for g in arr:
-                # print g, r, c
-                saved = self.grid[r][c]
-                self.grid[r][c] = g
-                self.missing -= 1
-                ans = self.solve()
-                if ans is not None:
-                    return ans
-                else:
-                    self.grid[r][c] = saved
-                    self.missing += 1
-        if self._is_solved():
-            self.solved_grid = [row[:] for row in self.grid]
-            return self.solved_grid
-        else:
-            for (forced_num, r, c) in forced_nums:
-                self.grid[r][c] = SudokuSolver.EMPTY
-                self.missing += 1
+  board.updateAllHints()
+  for rowIdx, row in enumerate(board):
+    for colIdx, element in enumerate(row):
+      if board[rowIdx][colIdx].number is None:
+        if len(board.getHints(rowIdx, colIdx)) == 0:
+          return None
+        uniqueHints = board.uniqueHints(rowIdx, colIdx)
+        for i, uniqueHint in enumerate(uniqueHints):
+          if len(uniqueHint) > 2:
+            return None
+          if len(uniqueHint) == 1:
+            board[rowIdx][colIdx].number = list(uniqueHint)[0]
+            answer = solve(board, guesses)
+            if answer is not None:
+              return answer
+            board[rowIdx][colIdx].number = None
+            board.updateAllHints()
 
 
+  # no forced moves
+  for rowIdx, row in enumerate(board):
+    for colIdx, element in enumerate(row):
+      if board[rowIdx][colIdx].number is None:
+        hints = board.getHints(rowIdx, colIdx)
+        for hint in hints:
+          board[rowIdx][colIdx].number = hint
+          answer = solve(board, guesses + 1)
+          if answer is not None:
+            return answer
+          board[rowIdx][colIdx].number = None
+          board.updateAllHints()
+  return None
 
-
-
-
-
-
-example_board = '''
-003020600
-900305001
-001806400
-008102900
-700000008
-006708200
-002609500
-800203009
-005010300
-'''
-
-example_board1 = '''
-123020600
-900305031
-001806400
-008102900
-700000008
-006708200
-002609500
-870203009
-065010300
-'''
-
-example_board2 = '''
-200080300
-060070084
-030500209
-000105408
-000000000
-402706000
-301007040
-720040060
-004010003
-'''
+if __name__ == '__main__':
+  total = 0
+  count = 0
+  with open('../pe096.txt', 'r') as f:
+    grid = None
+    for line in f.readlines():
+      if line.startswith('Grid'):
+        if grid is not None:
+          board = Board(grid)
+          total += solve(board)
+          print(f'finished {count+1}')
+          count += 1
+        grid = []
+      else:
+        grid.append(list([int(x), None][x == '0'] for x in line.strip()))
+  print(total)
