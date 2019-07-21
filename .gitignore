@@ -3,3 +3,9 @@
 *.pyc
 *.javac
 *.o
+*.swp
+**/*.pyc
+**/*.javac
+**/*.o
+**/*.swp
+python/*.swp
