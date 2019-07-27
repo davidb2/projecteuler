@@ -30,3 +30,4 @@ if __name__ == '__main__':
       M[i, j] = P(i, j) - int(i == j)
 
   X = np.linalg.solve(M, b)
+  print('Ans:', X[0])
