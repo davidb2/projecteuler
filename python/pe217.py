@@ -1,5 +1,6 @@
 #!/usr/bin/env python3.6
 import argparse
+import sys
 
 from functools import lru_cache
 
@@ -102,11 +103,18 @@ def T(n):
 
 def main(args):
   n = args.n
-  print(T(n) % MOD)
+  m = args.m
+  ans = T(n)
+  if m:
+    print(ans % MOD)
+  else:
+    print(ans)
 
 if __name__ == '__main__':
+  sys.setrecursionlimit(1<<20)
   parser = argparse.ArgumentParser()
   parser.add_argument('-n', type=int, required=True)
+  parser.add_argument('-m', action='store_true')
   args = parser.parse_args()
   main(args)
 
