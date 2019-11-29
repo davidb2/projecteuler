@@ -22,6 +22,7 @@ def w(N, A):
       for k in range(REPEATS+1)
       if (carry+k)%BASE == A[i]
     )
+
   return ways(0)
 
 
