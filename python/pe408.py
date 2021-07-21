@@ -30,8 +30,7 @@ def pyth_triples(limit):
       if isclose(z, floor(z)):
         xs.add((x, y, int(z)))
 
-  ys = sorted([(a**2, b**2) for a,b,_ in xs])
-  return ys
+  return sorted([(a**2, b**2) for a,b,_ in xs])
 
 def choose(n, k):
   return (FACT[n] * IFACT[k] * IFACT[n-k]) % MOD
@@ -51,7 +50,6 @@ def ways(A, n):
   def _ways(k):
     if k < 0: return 0
     X = (n, n) if k == len(A) else A[k]
-    # print(k, X)
     return ((paths(ORIGIN, X)%MOD) - (sum(
       (_ways(j)%MOD)*(paths(A[j], X)%MOD)
       for j in range(k)
@@ -59,9 +57,9 @@ def ways(A, n):
 
   return _ways(len(A))
 
-
 if __name__ == '__main__':
   sys.setrecursionlimit(1<<20)
   LIMIT = 10**7
   mines = pyth_triples(LIMIT)
-  ways(mines, LIMIT)
+  ans = ways(mines, LIMIT)
+  print(ans)
